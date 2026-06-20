@@ -18,14 +18,15 @@ Modelo de movimiento (decisión de diseño):
 """
 import numpy as np
 
-from spidercam.geometry.cable_kinematics import cable_lengths
-
+from spidercam.geometry.cable_kinematics import CableKinematics
+import numpy as np
 
 class SpiderCamModel:
     def __init__(self, stadium, initial_position, max_speed_m_s: float = 5.0):
         self.stadium = stadium
         self.position = np.array(initial_position, dtype=float)
         self.max_speed_m_s = max_speed_m_s
+        self._cable_kinematics = CableKinematics(stadium.anchor_points)
 
     def update(self, velocity_command, dt: float):
         """Integra la posición un paso dt a partir de una velocidad deseada.
@@ -45,7 +46,7 @@ class SpiderCamModel:
 
     def get_cable_lengths(self):
         """Longitudes actuales de los 4 cables (para visualización)."""
-        return cable_lengths(self.stadium.anchor_points, self.position)
+        return self._cable_kinematics.calculate_lengths(self.position)
 
     def _clip_to_workspace(self, position):
         """Satura la posición al volumen de trabajo físico del rig."""

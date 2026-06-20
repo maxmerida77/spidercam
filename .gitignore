@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.pyc
+venv/
+.venv/
+*.egg-info/
+
+# Datos pesados (no versionar videos ni resultados grandes)
+data/raw/*
+!data/raw/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+
+# Modelos descargados
+*.pt
+
+# Entornos / IDE
+.vscode/
+.idea/
+.env

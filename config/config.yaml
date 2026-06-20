@@ -1,0 +1,44 @@
+# Configuración central del sistema SpiderCam.
+# Nada de esto debe ir hardcodeado en el código fuente.
+
+video:
+  input_path: "data/raw/match_clip.mp4"
+  output_path: "data/processed/"
+  # IMPORTANTE: usar una toma fija de cancha completa (cámara táctica),
+  # no transmisión con paneo/zoom. Ver discusión sobre homografía.
+
+homography:
+  # Se llenan con scripts/calibrate_homography.py (clic manual sobre el frame)
+  calibration_points_image: []   # [[u1, v1], [u2, v2], ...] en píxeles
+  calibration_points_field: []   # [[x1, y1], [x2, y2], ...] en metros
+
+stadium:
+  field_length_m: 105
+  field_width_m: 68
+  # Anclajes de los 4 cables (esquinas del rig), en metros (x, y, z)
+  anchor_points:
+    - [0, 0, 25]
+    - [105, 0, 25]
+    - [105, 68, 25]
+    - [0, 68, 25]
+
+spidercam:
+  z_fixed_m: 15            # altura fija para V2 (simplificación, ver docs)
+  workspace_margin_m: 2    # margen de seguridad respecto a los anclajes
+
+detection:
+  model_path: "yolov8n.pt"     # modelo preentrenado, no se reentrena
+  confidence_threshold: 0.25
+  target_class: "sports ball"
+
+kalman:
+  process_noise: 0.01
+  measurement_noise: 1.0
+
+pid:
+  kp: [1.0, 1.0]    # ganancias por eje [x, y]
+  ki: [0.0, 0.0]
+  kd: [0.1, 0.1]
+
+metrics:
+  export_path: "data/processed/metrics.csv"
